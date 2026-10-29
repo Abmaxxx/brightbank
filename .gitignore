@@ -1,0 +1,14 @@
+# Secrets and environment files
+.env
+*.env
+
+node_modules/
+npm-debug.log*
+
+terraform/
+
+*.save
+*.save.*
+.terraform/
+*.tfstate
+*.tfstate.*

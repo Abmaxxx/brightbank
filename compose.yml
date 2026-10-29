@@ -1,0 +1,35 @@
+services:
+  frontend:
+    image: ${DOCKERHUB_USER}/brightbank-frontend:${TAG}
+    container_name: brightbank-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: ${DOCKERHUB_USER}/brightbank-backend:${TAG}
+    container_name: brightbank-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.4
+    container_name: brightbank-mysql
+    env_file:
+      - ./backend/.env
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  mysql-data:

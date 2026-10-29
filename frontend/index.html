@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightBank — Your Money, Simplified</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --ink: #202044;
+      --muted: #8587a6;
+      --purple: #6958ed;
+      --line: #eeedf8;
+      --green: #159d72;
+      --red: #e15b71;
+    }
+    body {
+      margin: 0;
+      background: #f7f8ff;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .layout { max-width: 1180px; margin: auto; padding: 28px 22px 50px; }
+    header {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 15px; margin-bottom: 32px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 23px; font-weight: 850; }
+    .logo {
+      display: grid; place-items: center; width: 44px; height: 44px;
+      border-radius: 15px; color: white;
+      background: linear-gradient(135deg,#7965ff,#a36bfa);
+      box-shadow: 0 7px 20px #8c77ff40;
+    }
+    .profile { background: white; border: 1px solid var(--line); border-radius: 30px; padding: 9px 15px; font-weight: 650; }
+    .welcome { margin-bottom: 23px; }
+    .welcome h1 { margin: 0 0 8px; font-size: clamp(25px,4vw,34px); letter-spacing: -1px; }
+    .welcome p { margin: 0; color: var(--muted); }
+    .hero {
+      border-radius: 27px; padding: 30px; color: white;
+      background: linear-gradient(115deg,#6658ec,#8870fa 58%,#b07aff);
+      box-shadow: 0 18px 42px #7564e72c;
+      position: relative; overflow: hidden;
+    }
+    .hero:after {
+      content: ""; position: absolute; width: 260px; height: 260px;
+      right: -75px; top: -120px; border-radius: 50%;
+      border: 42px solid #ffffff16; pointer-events: none;
+    }
+    .eyebrow { font-size: 13px; opacity: .83; }
+    .balance { font-size: clamp(34px,6vw,49px); font-weight: 850; letter-spacing: -1.8px; margin: 12px 0 24px; }
+    .hero-bottom { display: flex; justify-content: space-between; align-items: end; gap: 15px; flex-wrap: wrap; }
+    .account-number { font-size: 14px; opacity: .9; margin-top: 7px; }
+    .status { background: #ffffff22; padding: 8px 12px; border-radius: 20px; font-size: 12px; }
+    .section-title { font-size: 18px; margin: 29px 0 15px; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .action {
+      background: white; border: 1px solid var(--line);
+      border-radius: 22px; padding: 22px;
+      box-shadow: 0 5px 18px #29265b05;
+    }
+    .action-icon {
+      display: grid; place-items: center; width: 44px; height: 44px;
+      border-radius: 14px; font-size: 22px; margin-bottom: 15px;
+    }
+    .deposit-icon { background: #e1faf1; color: #13966d; }
+    .withdraw-icon { background: #fff0e8; color: #ec8b4e; }
+    .action h3 { margin: 0 0 7px; font-size: 17px; }
+    .action p { margin: 0 0 17px; color: var(--muted); font-size: 13px; }
+    .amount-row { display: flex; gap: 9px; }
+    input {
+      width: 100%; min-width: 0; border: 1px solid #e8e7f3;
+      background: #fbfbff; border-radius: 12px; padding: 12px;
+      outline: none;
+    }
+    input:focus { border-color: var(--purple); }
+    .btn {
+      border: 0; color: white; background: var(--purple);
+      border-radius: 12px; padding: 12px 16px; font-weight: 750;
+    }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .transactions {
+      background: white; border: 1px solid var(--line);
+      border-radius: 22px; padding: 8px 22px;
+    }
+    .transaction {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; padding: 17px 0; border-bottom: 1px solid #f1f0f8;
+    }
+    .transaction:last-child { border-bottom: 0; }
+    .tx-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .tx-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 14px; display: grid; place-items: center; font-size: 19px;
+    }
+    .tx-name { font-weight: 750; font-size: 14px; }
+    .tx-date { color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .tx-amount { font-weight: 800; white-space: nowrap; }
+    .positive { color: var(--green); }
+    .negative { color: var(--red); }
+    #notice { margin-top: 15px; font-size: 13px; font-weight: 650; }
+    .empty { padding: 28px 0; color: var(--muted); text-align: center; }
+    footer { text-align: center; color: #999ab2; font-size: 12px; margin-top: 28px; }
+    @media(max-width:650px) {
+      .layout { padding: 20px 14px 35px; }
+      .hero { padding: 23px; }
+      .actions { grid-template-columns: 1fr; }
+      .transaction { align-items: flex-start; }
+      .transactions { padding: 5px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <header>
+      <div class="brand"><span class="logo">✦</span> BrightBank</div>
+      <div class="profile">👤 Demo Account</div>
+    </header>
+
+    <section class="welcome">
+      <h1>Your money, made brighter.</h1>
+      <p>A simple place to manage your everyday finances.</p>
+    </section>
+
+    <section class="hero">
+      <div class="eyebrow">TOTAL AVAILABLE BALANCE</div>
+      <div class="balance" id="balance">Loading...</div>
+      <div class="hero-bottom">
+        <div>
+          <div class="eyebrow">ACCOUNT HOLDER</div>
+          <strong id="accountName">BrightBank Demo Account</strong>
+          <div class="account-number">Demo account ···· 0001</div>
+        </div>
+        <span class="status">● Account active</span>
+      </div>
+    </section>
+
+    <h2 class="section-title">Quick actions</h2>
+    <section class="actions">
+      <form class="action" id="depositForm">
+        <div class="action-icon deposit-icon">↗</div>
+        <h3>Add money</h3>
+        <p>Deposit funds into your account.</p>
+        <div class="amount-row">
+          <input name="amount" type="number" min="0.01" max="1000000"
+            step="0.01" placeholder="Amount (PKR)" required>
+          <button class="btn" type="submit">Deposit</button>
+        </div>
+      </form>
+
+      <form class="action" id="withdrawForm">
+        <div class="action-icon withdraw-icon">↙</div>
+        <h3>Withdraw money</h3>
+        <p>Take money out of your account.</p>
+        <div class="amount-row">
+          <input name="amount" type="number" min="0.01" max="1000000"
+            step="0.01" placeholder="Amount (PKR)" required>
+          <button class="btn" type="submit">Withdraw</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="notice" role="status" aria-live="polite"></div>
+
+    <h2 class="section-title">Recent transactions</h2>
+    <section class="transactions" id="transactions">
+      <div class="empty">Loading transactions...</div>
+    </section>
+
+    <footer>BrightBank Demo · Built for Docker & Kubernetes practice</footer>
+  </main>
+
+  <script>
+    const API = "http://54.84.179.91:5000/api";
+
+    const money = value => new Intl.NumberFormat("en-PK", {
+      style: "currency", currency: "PKR",
+      maximumFractionDigits: 2
+    }).format(Number(value));
+
+    async function request(path, options = {}) {
+      const response = await fetch(API + path, options);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Request failed");
+      return data;
+    }
+
+    async function loadAccount() {
+      const account = await request("/account");
+      document.getElementById("balance").textContent = money(account.balance);
+      document.getElementById("accountName").textContent = account.account_name;
+    }
+
+    async function loadTransactions() {
+      const transactions = await request("/transactions");
+      const container = document.getElementById("transactions");
+
+      if (!transactions.length) {
+        container.innerHTML = '<div class="empty">No transactions yet. Make your first move!</div>';
+        return;
+      }
+
+      container.innerHTML = transactions.map(tx => {
+        const deposit = tx.type === "DEPOSIT";
+        const date = new Date(tx.created_at).toLocaleString();
+        return `
+          <article class="transaction">
+            <div class="tx-left">
+              <div class="tx-icon" style="background:${deposit ? '#e1faf1' : '#fff0e8'}">
+                ${deposit ? '↗' : '↙'}
+              </div>
+              <div>
+                <div class="tx-name">${deposit ? 'Money deposited' : 'Money withdrawn'}</div>
+                <div class="tx-date">${date}</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div class="tx-amount ${deposit ? 'positive' : 'negative'}">
+                ${deposit ? '+' : '−'}${money(tx.amount)}
+              </div>
+              <div class="tx-date">Balance: ${money(tx.balance_after)}</div>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    async function refresh() {
+      await Promise.all([loadAccount(), loadTransactions()]);
+    }
+
+    async function handleTransaction(event, endpoint) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector("button");
+      const notice = document.getElementById("notice");
+      button.disabled = true;
+      notice.textContent = "Processing transaction...";
+      notice.style.color = "#8587a6";
+
+      try {
+        const amount = Number(form.elements.amount.value);
+        const result = await request(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount })
+        });
+        notice.textContent = result.message;
+        notice.style.color = "#159d72";
+        form.reset();
+        await refresh();
+      } catch (error) {
+        notice.textContent = error.message;
+        notice.style.color = "#e15b71";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById("depositForm").addEventListener("submit", e =>
+      handleTransaction(e, "/deposit")
+    );
+    document.getElementById("withdrawForm").addEventListener("submit", e =>
+      handleTransaction(e, "/withdraw")
+    );
+
+    refresh().catch(error => {
+      document.getElementById("notice").textContent =
+        "Could not connect to the backend. Check Node.js and MySQL.";
+      document.getElementById("notice").style.color = "#e15b71";
+      console.error(error);
+    });
+  </script>
+</body>
+</html>
+
