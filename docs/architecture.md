@@ -67,37 +67,10 @@ flowchart TD
 
 ---
 
-## 3. Observability & incident path
-
-```mermaid
-flowchart TD
-  Symptom[Symptom: deposits fail / ready 503]
-  Health{curl /api/health}
-  Ready{curl /api/ready}
-  Logs[docker logs backend<br/>structured JSON]
-  Ps[docker compose ps]
-  Fix[Restart dependency<br/>e.g. mysql]
-  Recover[ready returns 200]
-
-  Symptom --> Health
-  Symptom --> Ready
-  Health -->|alive| Ready
-  Ready -->|503 not_ready| Logs
-  Ready -->|503| Ps
-  Logs --> Fix
-  Ps --> Fix
-  Fix --> Recover
-```
-
-Metrics/alert **proposal** (not installed): request error rate, `/api/ready` failures, container restarts — see runbook.
-
----
-
 ## 4. Security boundaries (summary)
 
 | Layer | Control |
 |-------|---------|
-| Git | `.env` ignored; only examples committed |
 | Image build | `.dockerignore` excludes `.env`, `node_modules`, `.git` |
 | Runtime | Non-root `USER`; least-privilege DB user |
 | CI | Secrets in GitHub Actions; Trivy + npm audit before push |
