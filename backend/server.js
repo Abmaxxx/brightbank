@@ -260,14 +260,9 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Start API
+// Start API (only when run directly, not when imported by tests)
 const PORT = Number(process.env.PORT || 5000);
-
-const server = app.listen(PORT, "0.0.0.0", () => {
-  log("info", "BrightBank API started", {
-    port: PORT
-  });
-});
+let server;
 
 // Graceful shutdown for Docker
 function shutdown(signal) {
@@ -278,10 +273,7 @@ function shutdown(signal) {
       await pool.end();
       process.exit(0);
     } catch (error) {
-      log("error", "Shutdown failed", {
-        error: error.message
-      });
-
+      log("error", "Shutdown failed", { error: error.message });
       process.exit(1);
     }
   });
@@ -289,5 +281,13 @@ function shutdown(signal) {
   setTimeout(() => process.exit(1), 10000).unref();
 }
 
-process.on("SIGTERM", () => shutdown("SIGTERM"));
-process.on("SIGINT", () => shutdown("SIGINT"));
+if (require.main === module) {
+  server = app.listen(PORT, "0.0.0.0", () => {
+    log("info", "BrightBank API started", { port: PORT });
+  });
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
+}
+
+module.exports = app;
