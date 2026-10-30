@@ -1,30 +1,29 @@
 # AI-use disclosure
 
-AI assistance was used on this assessment. I ran commands, verified results, fixed failures, and can explain the submitted design in review.
+I used AI assistance (ChatGPT / Claude / Cursor) on this assessment. My main focus was **DevOps** (Docker, Compose, CI/CD, security scans, deploy/rollback, evidence)—not application coding. I ran the commands, tested on the VM, reviewed what AI suggested, and can explain the solution in review.
 
-## Tools used
+## App code (backend / frontend)
 
-- ChatGPT / Claude (chat) — assessment guidance, Docker/Compose commands, CI YAML drafts, debugging prompts  
-- Cursor (IDE agent) — editing help and explanations while working on related machine setup  
+Coding the app was **not** my main task. I used AI for the **backend and frontend coding portion** (API / UI), then wired that into Docker, Compose, and the pipeline myself.
 
-## Specific uses
+## Concepts, edits, and logs
 
-| Area | AI role | My role |
-|------|---------|---------|
-| Dockerfiles / `.dockerignore` / non-root `USER` | Suggested file contents and Compose port `8080:8080` | Applied on VM, rebuilt, verified `whoami` |
-| `.gitignore` | Proposed patterns | Trimmed to what the repo actually needed; kept secrets out of git |
-| Backend testability (`module.exports`, Jest, ESLint) | Drafted tests and lint config | Ran `npm test` / `npm run lint`; confirmed 6 passing checks |
-| `.github/workflows/ci.yml` | Drafted test / security / build-and-push jobs | Pushed, watched Actions, iterated on real failures |
-| Trivy action version / CVE fixes | Explained errors; suggested pin upgrade and `apk upgrade` | Chose versions, committed, re-ran until green |
-| Docker Hub token / scopes | Guided token + secret setup | Created tokens/secrets; confirmed push from pipeline |
-| Deploy / rollback / MySQL incident | Step lists for evidence | Executed on EC2; captured screenshots |
-| README, runbook, decision memo, architecture | Drafted documentation structure and wording | Reviewed against actual repo behavior and evidence |
+- **Concepts:** to clear DevOps ideas I was unsure about.
+- **Edits:** when I got stuck changing a file and needed a small nudge.
+- **Logs:** when a pipeline or container log was hard to read.
 
-## What AI did **not** do
+**Docker Compose:** I already had a basic idea; I used AI only to clear a few **concepts**, not to replace my understanding of how the stack runs.
 
-- Did not access Apex production systems or real customer data  
-- Did not replace understanding of the pipeline: I can walk through each job, why push is blocked on failure, and how rollback via `TAG` works  
+**YAML:** My pipeline/Compose **concepts** were clear; I used AI mainly for **YAML syntax** (structure, indentation, valid keys) when writing or fixing those files.
 
-## Honesty note
+## Non-root / `USER` (specific example)
 
-Undisclosed AI use is a red flag in the brief. This file is the disclosure. During the live review I will demo deploy/rollback and explain trade-offs in my own words.
+I did not already know the Docker **non-root `USER`** practice. When the pipeline failed on Trivy (missing `USER` / DS-0002), I used AI to understand **why** it failed and what non-root means. Then I added `USER node` / `USER nginx` and verified a green run. Other CI failures (Trivy version, image CVEs, Docker Hub token scopes) — same pattern: AI to interpret the error, then I applied and checked the fix.
+
+## Documentation (**with the help of AI**)
+
+**With the help of AI**, I drafted the **README**, runbook, decision memo, architecture notes, and other docs I uploaded to GitHub—after I explained my real setup and evidence to the AI. I did **not** upload that text as-is: I **reviewed and refined** it, then committed/uploaded.
+
+## Honesty
+
+AI helped with app code drafts, YAML syntax, concept checks, failure explanation, and documentation (**with the help of AI**, then refined by me). The demos, screenshots, and pipeline results are work I executed and can defend in the live review.
