@@ -3,7 +3,7 @@ services:
     image: ${DOCKERHUB_USER}/brightbank-frontend:${TAG}
     container_name: brightbank-frontend
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - backend
 
