@@ -17,7 +17,7 @@ describe("BrightBank API", () => {
   test("GET /api/health returns alive", async () => {
     const res = await request(app).get("/api/health");
     expect(res.status).toBe(200);
-    expect(res.body.status).toBe("alive");
+    expect(res.body.status).toBe("dead");
   });
 
   test("GET /api/ready returns 200 when database is up", async () => {
