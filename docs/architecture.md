@@ -80,4 +80,4 @@ flowchart TD
 
 ## Diagram file
 
-Same views as SVG for PDF/slide paste: [`architecture.svg`](architecture.svg).
+Same views as SVG for PDF/slide paste: [`architecture.png`](architecture.png).
